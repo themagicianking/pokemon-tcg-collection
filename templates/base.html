@@ -8,7 +8,13 @@
     {% endblock %}
   </head>
   <body>
-    <div id="header">{% block header %}Pokemon TCG Collection Builder {% endblock %}<a href="{{ url_for('collection')}}">Collection</a></div>
+    <div id="header">
+      {% block header %}Pokemon TCG Collection Builder {% endblock %}<a
+        href="{{ url_for('collection')}}"
+        >Collection</a
+      >
+      <a href="{{ url_for('search')}}">Search</a>
+    </div>
     <div id="content">{% block content %}{% endblock %}</div>
     <div id="footer">
       {% block footer %}Created by Thane Wilson for Techtonica 2025. {% endblock

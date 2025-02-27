@@ -39,3 +39,8 @@ def collection():
             return jsonify({"message": "Card added successfully"}), 201
         except sqlite3.Error as e:
             return jsonify({"error": str(e)}, 500)
+
+
+@app.route("/search")
+def search():
+    return render_template("search.html")
