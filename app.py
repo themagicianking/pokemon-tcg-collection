@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, redirect, render_template, request, url_for, jsonify
 import sqlite3
 
 app = Flask(__name__)
@@ -25,9 +25,10 @@ def collection():
 
     if request.method == "GET":
         try:
-            cursor.execute("SELECT * FROM collection")
-            cards = [row for row in cursor.fetchall()]
-            return jsonify(cards), 200
+            return render_template("collection.html")
+            # cursor.execute("SELECT * FROM collection")
+            # cards = [row for row in cursor.fetchall()]
+            # return jsonify(cards), 200
         except sqlite3.Error as e:
             return jsonify({"error": str(e)}), 500
     elif request.method == "POST":
