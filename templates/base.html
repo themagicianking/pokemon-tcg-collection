@@ -1,0 +1,18 @@
+<!doctype html>
+<html>
+  <head>
+    {% block head %}
+    <title>
+      {% block title %}{% endblock %} Pokemon TCG Collection Builder
+    </title>
+    {% endblock %}
+  </head>
+  <body>
+    <div id="header">{% block header %}Pokemon TCG Collection Builder{% endblock %}</div>
+    <div id="content">{% block content %}{% endblock %}</div>
+    <div id="footer">
+      {% block footer %}Created by Thane Wilson for Techtonica 2025. {% endblock
+      %}
+    </div>
+  </body>
+</html>
