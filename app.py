@@ -44,7 +44,6 @@ def collection():
 @app.route("/search", methods=["POST", "GET"])
 def search():
     if request.method == "POST":
-        value = request.form
-    else:
-        value = None
+        value = request.form.get("search")
+        value = "hi"
     return render_template("search.html", cards=value)
