@@ -1,4 +1,5 @@
 from flask import Flask, redirect, render_template, request, url_for, jsonify
+import requests
 import sqlite3
 
 app = Flask(__name__)
@@ -44,6 +45,15 @@ def collection():
 @app.route("/search", methods=["POST", "GET"])
 def search():
     if request.method == "POST":
-        value = request.form.get("search")
-        value = "hi"
-    return render_template("search.html", cards=value)
+        search_term = request.form.get("search")
+    try:
+        response = requests.get(
+            "https://api.pokemontcg.io/v2/cards?pageSize=10&q=name:{name}".format(
+                name=search_term
+            )
+        )
+        if response.status_code == 200:
+            cards = response.json()["data"]
+    except:
+        cards = {}
+    return render_template("search.html", cards=cards)
