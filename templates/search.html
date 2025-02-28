@@ -1,5 +1,10 @@
 {% extends "base.html" %} {% block title %}Search{% endblock %} {% block content
-%}
-<h1>Search</h1>
-<p>Search for cards to add to your collection.</p>
-{% endblock %}
+%} {% if cards %}
+<ul>
+  {% for card in cards %}
+  <li>{{card.url}}</li>
+  {% endfor %}
+</ul>
+{% else %}
+<p>No cards matched your search.</p>
+{% endif %} {% endblock %}

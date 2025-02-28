@@ -9,13 +9,22 @@
   </head>
   <body>
     <div id="header">
-      {% block header %}Pokemon TCG Collection Builder {% endblock %}<a
-        href="{{ url_for('collection')}}"
-        >Collection</a
-      >
-      <a href="{{ url_for('search')}}">Search</a>
+      {% block header %}Pokemon TCG Collection Builder {% endblock %}
     </div>
-    <div id="content">{% block content %}{% endblock %}</div>
+    <div id="content">
+      <h2>Search</h2>
+      <p>Search for cards to add to your collection.</p>
+      <form action="{{ url_for('search')}}" method="POST">
+        <label for="search">Search for a Pokemon card:</label
+        ><input
+          type="search"
+          id="search"
+          name="search"
+          oninput="SubmitEvent()"
+        />
+      </form>
+      {% block content %}{% endblock %}
+    </div>
     <div id="footer">
       {% block footer %}Created by Thane Wilson for Techtonica 2025. {% endblock
       %}

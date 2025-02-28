@@ -41,6 +41,10 @@ def collection():
             return jsonify({"error": str(e)}, 500)
 
 
-@app.route("/search")
+@app.route("/search", methods=["POST", "GET"])
 def search():
-    return render_template("search.html")
+    if request.method == "POST":
+        value = request.form
+    else:
+        value = None
+    return render_template("search.html", cards=value)
