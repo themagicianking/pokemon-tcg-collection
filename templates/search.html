@@ -2,7 +2,10 @@
 %} {% if cards %}
 <ul>
   {% for card in cards %}
-  <li><img src="{{card.images.small}}"></li>
+  <li>
+    <img src="{{card[3]}}" />
+    <p>{{card[4]}}</p>
+  </li>
   {% endfor %}
 </ul>
 {% else %}

@@ -26,14 +26,25 @@ def create_database():
     c = conn.cursor()
     c.execute("""DROP TABLE IF EXISTS cardset""")
     c.execute(
-        """CREATE TABLE IF NOT EXISTS cardset (id INTEGER PRIMARY KEY, name VARCHAR, type VARCHAR, image VARCHAR)"""
+        """CREATE TABLE IF NOT EXISTS cardset (id INTEGER PRIMARY KEY, stage VARCHAR, energytype VARCHAR, image VARCHAR, text VARCHAR)"""
     )
     print("Created cardset table")
     for card in cardset:
-        c.execute(
-            "INSERT INTO cardset (name, type, image) VALUES (?,?,?)",
-            (card["name"], card["types"][0], card["images"]["small"]),
-        )
+        if card.get("flavorText"):
+            c.execute(
+                "INSERT INTO cardset (stage, energytype, image, text) VALUES (?,?,?,?)",
+                (
+                    card["subtypes"][0],
+                    card["types"][0],
+                    card["images"]["small"],
+                    card["flavorText"],
+                ),
+            )
+        else:
+            c.execute(
+                "INSERT INTO cardset (stage, energytype, image) VALUES (?,?,?)",
+                (card["subtypes"][0], card["types"][0], card["images"]["small"]),
+            ),
     print("Added cards to cardset table")
     conn.commit()
     conn.close()
@@ -60,31 +71,41 @@ def collection():
             # return render_template("collection.html", cards=cards)
         except sqlite3.Error as e:
             return jsonify({"error": str(e)}), 500
-    elif request.method == "POST":
-        try:
-            new_card = request.args.get("card")
-            cursor.execute("INSERT INTO collection (card) VALUES (?)", (new_card))
-            conn.commit()
-            conn.close()
-            return jsonify({"message": "Card added successfully"}), 201
-        except sqlite3.Error as e:
-            return jsonify({"error": str(e)}, 500)
+    # elif request.method == "POST":
+    #     try:
+    #         new_card = request.args.get("card")
+    #         cursor.execute("INSERT INTO collection (card) VALUES (?)", (new_card))
+    #         conn.commit()
+    #         conn.close()
+    #         return jsonify({"message": "Card added successfully"}), 201
+    #     except sqlite3.Error as e:
+    #         return jsonify({"error": str(e)}, 500)
 
 
 @app.route("/search", methods=["POST", "GET"])
 def search():
     if request.method == "POST":
-        search_term = request.form.get("search")
-    try:
-        response = requests.get(
-            "https://api.pokemontcg.io/v2/cards?pageSize=10&q=name:{name}".format(
-                name=search_term
-            )
+        stage = request.form.get("stage")
+        energy_type = request.form.get("energy_type")
+        print(stage)
+        print(energy_type)
+        # try:
+        conn = sqlite3.connect("pokemon.db")
+        cursor = conn.cursor()
+        cursor.execute(
+            "SELECT * FROM cardset WHERE stage = (?) AND energytype = (?)",
+            (stage, energy_type),
         )
-        if response.status_code == 200:
-            cards = response.json()["data"]
-    except:
-        cards = {}
+        cards = cursor.fetchall()
+        # response = requests.get(
+        #     "https://api.pokemontcg.io/v2/cards?pageSize=10&q=name:{name}".format(
+        #         name=search_term
+        #     )
+        # )
+        # if response.status_code == 200:
+        #     cards = response.json()["data"]
+    # except:
+    # img_urls = None
     return render_template("search.html", cards=cards)
 
 
