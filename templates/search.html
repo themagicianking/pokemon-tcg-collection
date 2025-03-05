@@ -3,7 +3,20 @@
 <ul>
   {% for card in cards %}
   <li>
-    {{card}}
+    <div class="col s12 m7">
+      <h2 class="header">{{card.name}}</h2>
+      <div class="card horizontal">
+        <div class="card-image">
+          <img src="{{card.image}}" />
+        </div>
+        <div class="card-stacked">
+          <div class="card-content">{{card}}</div>
+          <div class="card-action">
+            <a href="#">This is a link</a>
+          </div>
+        </div>
+      </div>
+    </div>
   </li>
   {% endfor %}
 </ul>

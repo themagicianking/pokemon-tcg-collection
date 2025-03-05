@@ -7,7 +7,7 @@ app = Flask(__name__)
 
 def get_set():
     try:
-        response = requests.get("https://api.pokemontcg.io/v2/cards?q=set.id:hgss3")
+        response = requests.get("https://api.pokemontcg.io/v2/cards?q=set.id:hgss3 supertype:pokemon")
         if response.status_code == 200:
             cards = response.json()["data"]
             return cards
@@ -24,14 +24,15 @@ def create_database():
     c = conn.cursor()
     c.execute("""DROP TABLE IF EXISTS cardset""")
     c.execute(
-        """CREATE TABLE IF NOT EXISTS cardset (id INTEGER PRIMARY KEY, stage VARCHAR, energytype VARCHAR, image VARCHAR, text VARCHAR)"""
+        """CREATE TABLE IF NOT EXISTS cardset (id INTEGER PRIMARY KEY, name VARCHAR, stage VARCHAR, energytype VARCHAR, image VARCHAR, text VARCHAR)"""
     )
     print("Created cardset table")
     for card in cardset:
         if card.get("flavorText"):
             c.execute(
-                "INSERT INTO cardset (stage, energytype, image, text) VALUES (?,?,?,?)",
+                "INSERT INTO cardset (name, stage, energytype, image, text) VALUES (?,?,?,?,?)",
                 (
+                    card["name"],
                     card["subtypes"][0],
                     card["types"][0],
                     card["images"]["small"],
@@ -40,8 +41,13 @@ def create_database():
             )
         else:
             c.execute(
-                "INSERT INTO cardset (stage, energytype, image) VALUES (?,?,?)",
-                (card["subtypes"][0], card["types"][0], card["images"]["small"]),
+                "INSERT INTO cardset (name, stage, energytype, image) VALUES (?,?,?,?)",
+                (
+                    card["name"],
+                    card["subtypes"][0],
+                    card["types"][0],
+                    card["images"]["small"],
+                ),
             ),
     print("Added cards to cardset table")
     conn.commit()
