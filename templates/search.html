@@ -1,8 +1,8 @@
 {% extends "base.html" %} {% block title %}Search{% endblock %} {% block content
 %} {% if cards %}
-<ul>
+<ul class="collection">
   {% for card in cards %}
-  <li>
+  <li class="collection-item">
     <div class="col s12 m7">
       <h2 class="header">{{card.name}}</h2>
       <div class="card horizontal">
