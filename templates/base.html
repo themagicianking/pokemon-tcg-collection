@@ -45,42 +45,42 @@
         </select>
         <input type="submit" />
       </form>
+      {% block content %}{% endblock %}
+    </div>
+    <div id="footer">
+      {% block footer %}
       <div>
         <canvas id="pokemonByType"></canvas>
       </div>
-      {% block content %}{% endblock %}
-    </div>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-      const ctx = document.getElementById('pokemonByType')
-      new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-          labels: [
-            'Colorless',
-            'Darkness',
-            'Dragon',
-            'Fighting',
-            'Fire',
-            'Grass',
-            'Lightning',
-            'Metal',
-            'Psychic',
-            'Water'
-          ],
-          datasets: [
-            {
-              label: 'Pokemon by type',
-              data: [12, 19, 3, 5, 2, 3, 1, 2, 3, 4],
-              borderWidth: 1
-            }
-          ]
-        }
-      })
-    </script>
-    <div id="footer">
-      {% block footer %}Created by Thane Wilson for Techtonica 2025. {% endblock
-      %}
+      <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+      <script>
+        const ctx = document.getElementById('pokemonByType')
+        new Chart(ctx, {
+          type: 'doughnut',
+          data: {
+            labels: [
+              'Colorless',
+              'Darkness',
+              'Dragon',
+              'Fighting',
+              'Fire',
+              'Grass',
+              'Lightning',
+              'Metal',
+              'Psychic',
+              'Water'
+            ],
+            datasets: [
+              {
+                label: 'Pokemon by type',
+                data: [12, 19, 3, 5, 2, 3, 1, 2, 3, 4],
+                borderWidth: 1
+              }
+            ]
+          }
+        })
+      </script>
+      Created by Thane Wilson for Techtonica 2025. {% endblock %}
     </div>
   </body>
 </html>
