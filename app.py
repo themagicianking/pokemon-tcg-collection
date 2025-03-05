@@ -1,4 +1,4 @@
-from flask import Flask, redirect, render_template, request, url_for, jsonify
+from flask import Flask, render_template, request, jsonify
 import requests
 import sqlite3
 
@@ -7,9 +7,7 @@ app = Flask(__name__)
 
 def get_set():
     try:
-        response = requests.get(
-            "https://api.pokemontcg.io/v2/cards?set.name:HS—Undaunted"
-        )
+        response = requests.get("https://api.pokemontcg.io/v2/cards?q=set.id:hgss3")
         if response.status_code == 200:
             cards = response.json()["data"]
             return cards
@@ -87,16 +85,15 @@ def search():
     if request.method == "POST":
         stage = request.form.get("stage")
         energy_type = request.form.get("energy_type")
-        print(stage)
-        print(energy_type)
         # try:
         conn = sqlite3.connect("pokemon.db")
+        conn.row_factory = sqlite3.Row
         cursor = conn.cursor()
         cursor.execute(
             "SELECT * FROM cardset WHERE stage = (?) AND energytype = (?)",
             (stage, energy_type),
         )
-        cards = cursor.fetchall()
+        cards = [dict(row) for row in cursor.fetchall()]
         # response = requests.get(
         #     "https://api.pokemontcg.io/v2/cards?pageSize=10&q=name:{name}".format(
         #         name=search_term
