@@ -26,7 +26,7 @@ To do list items will go here. As of right now my priority is to complete the cu
 Current requirement:
 
 - [x] Develop a minimum of two complex search queries using full-text search libraries
-- [ ] Ensure your README includes set up instructions, description, and a visual of your application in action including your database
+- [x] Ensure your README includes set up instructions, description, and a visual of your application in action including your database
 - Complete 1 of the 2 tasks below:
   - [x] Display a simple data visualization
   - [ ] Add support for bulk data operations (import/export)

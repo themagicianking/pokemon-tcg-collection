@@ -74,13 +74,20 @@ def main():
             "CREATE VIRTUAL TABLE IF NOT EXISTS cardsearch USING FTS5(id,name,stage,energytype,image,text)"
         )
         c.execute("INSERT INTO cardsearch SELECT * FROM cardset")
-        search = request.form.get("search")
+        desc = request.form.get("desc")
+        name = request.form.get("name")
         # stage = request.form.get("stage")
         # energy_type = request.form.get("energy_type")
         # conn = sqlite3.connect("pokemon.db")
         # conn.row_factory = sqlite3.Row
         # c = conn.cursor()
-        c.execute("SELECT * FROM cardsearch WHERE cardsearch MATCH (?)", (search,))
+        c.execute(
+            "SELECT * FROM cardsearch WHERE text MATCH (?) AND name MATCH (?)",
+            (
+                desc,
+                name,
+            ),
+        )
         results = [dict(row) for row in c.fetchall()]
         conn.close()
     else:

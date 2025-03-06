@@ -24,8 +24,10 @@
       <h2>Search</h2>
       <p>Search for cards to add to your collection.</p>
       <form action="/" method="POST">
-        <label for "search">Search for cards containing this text</label>
-        <input name="search" type="text" id="search" />
+        <label for "search">Search for cards with descriptions containing this text</label>
+        <input name="desc" type="search" id="desc" required/>
+        <label for "name">and this name</label>
+        <input name="name" type="search" id="name" required>
         <!-- <label for="search">Select a card stage:</label
         ><select name="stage" id="stage">
           <option value="Basic">Basic</option>
