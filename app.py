@@ -53,6 +53,18 @@ def create_database():
 
 @app.route("/", methods=["GET", "POST"])
 def main():
+    type_data = {
+        "Colorless": 0,
+        "Darkness": 0,
+        "Dragon": 0,
+        "Fighting": 0,
+        "Fire": 0,
+        "Grass": 0,
+        "Lightning": 0,
+        "Metal": 0,
+        "Psychic": 0,
+        "Water": 0,
+    }
     if request.method == "POST":
         conn = sqlite3.connect("pokemon.db")
         conn.row_factory = sqlite3.Row
@@ -78,7 +90,11 @@ def main():
         c.execute("SELECT * FROM cardset")
         results = [dict(row) for row in c.fetchall()]
         conn.close()
-    return render_template("base.html", results=results)
+    for card in results:
+        energytype = card["energytype"]
+        type_data[energytype] = type_data[energytype] + 1
+    type_values = list(type_data.values())
+    return render_template("base.html", results=results, type_values=type_values)
 
 
 @app.route("/collection", methods=["GET", "POST"])
