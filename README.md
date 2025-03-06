@@ -13,7 +13,7 @@ This is an app built to fulfil python-centric knowledge checks for Techtonica.
 
 ## Usage
 
-Use the search bar to find cards whose text fields (currently name, type, and about) contain the given word. The chart at the bottom of the page displays the type breakdown of the cards in your search results.
+Use the search fields to find a card whose description matches a certain word and whose name matches a certain word. The chart at the bottom of the page displays the type breakdown of the cards in your search results.
 
 ## Testing
 
