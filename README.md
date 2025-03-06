@@ -7,10 +7,13 @@ This is an app built to fulfil python-centric knowledge checks for Techtonica.
 ## Installation
 
 1. Clone the repo to your local machine.
+2. Navigate into the project directory and run ``source .venv/bin/activate`` to activate your virtual environment.
+3. Use ``pip install -r requirements.txt`` to install all the necessary libraries.
+4. Run ``python app.py`` to activate the server and navigate to the local port the app is running on (this will ensure database creation on startup).
 
 ## Usage
 
-Under construction.
+Use the search bar to find cards whose text fields (currently name, type, and about) contain the given word. The chart at the bottom of the page displays the type breakdown of the cards in your search results.
 
 ## Testing
 
@@ -22,10 +25,10 @@ To do list items will go here. As of right now my priority is to complete the cu
 
 Current requirement:
 
-- [ ] Develop a minimum of two complex search queries using full-text search libraries
+- [x] Develop a minimum of two complex search queries using full-text search libraries
 - [ ] Ensure your README includes set up instructions, description, and a visual of your application in action including your database
 - Complete 1 of the 2 tasks below:
-  - [ ] Display a simple data visualization
+  - [x] Display a simple data visualization
   - [ ] Add support for bulk data operations (import/export)
         Consolidate your work from KC1 - KC6 into a single application
 
