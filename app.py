@@ -31,26 +31,19 @@ def create_database():
     print("Created cardset table")
     for card in cardset:
         if card.get("flavorText"):
-            c.execute(
-                "INSERT INTO cardset (name, stage, energytype, image, text) VALUES (?,?,?,?,?)",
-                (
-                    card["name"],
-                    card["subtypes"][0],
-                    card["types"][0],
-                    card["images"]["small"],
-                    card["flavorText"],
-                ),
-            )
+            text = card["flavorText"]
         else:
-            c.execute(
-                "INSERT INTO cardset (name, stage, energytype, image) VALUES (?,?,?,?)",
-                (
-                    card["name"],
-                    card["subtypes"][0],
-                    card["types"][0],
-                    card["images"]["small"],
-                ),
+            text = ""
+        c.execute(
+            "INSERT INTO cardset (name, stage, energytype, image, text) VALUES (?,?,?,?,?)",
+            (
+                card["name"],
+                card["subtypes"][0],
+                card["types"][0],
+                card["images"]["small"],
+                text,
             ),
+        )
     print("Added cards to cardset table")
     conn.commit()
     conn.close()
@@ -58,9 +51,31 @@ def create_database():
     #     print("Error while connecting to SQLite database:", e)
 
 
-@app.route("/")
+@app.route("/", methods=["GET", "POST"])
 def main():
-    return render_template("base.html")
+    if request.method == "POST":
+        conn = sqlite3.connect("pokemon.db")
+        conn.row_factory = sqlite3.Row
+        c = conn.cursor()
+        c.execute("""DROP TABLE IF EXISTS cardsearch""")
+        c.execute(
+            "CREATE VIRTUAL TABLE IF NOT EXISTS cardsearch USING FTS5(id,name,stage,energytype,image,text)"
+        )
+        c.execute("INSERT INTO cardsearch SELECT * FROM cardset")
+        # stage = request.form.get("stage")
+        # energy_type = request.form.get("energy_type")
+        # conn = sqlite3.connect("pokemon.db")
+        # conn.row_factory = sqlite3.Row
+        # c = conn.cursor()
+        c.execute("SELECT * FROM cardsearch WHERE text MATCH 'times'")
+        results = [dict(row) for row in c.fetchall()]
+    else:
+        conn = sqlite3.connect("pokemon.db")
+        conn.row_factory = sqlite3.Row
+        c = conn.cursor()
+        c.execute("SELECT * FROM cardset")
+        results = [dict(row) for row in c.fetchall()]
+    return render_template("base.html", results=results)
 
 
 @app.route("/collection", methods=["GET", "POST"])
@@ -88,26 +103,26 @@ def collection():
     #         return jsonify({"error": str(e)}, 500)
 
 
-@app.route("/search", methods=["POST", "GET"])
-def search():
-    if request.method == "POST":
-        stage = request.form.get("stage")
-        energy_type = request.form.get("energy_type")
-        conn = sqlite3.connect("pokemon.db")
-        conn.row_factory = sqlite3.Row
-        cursor = conn.cursor()
-        cursor.execute(
-            "SELECT * FROM cardset WHERE stage = (?) AND energytype = (?)",
-            (stage, energy_type),
-        )
-        cards = [dict(row) for row in cursor.fetchall()]
-    else:
-        conn = sqlite3.connect("pokemon.db")
-        conn.row_factory = sqlite3.Row
-        cursor = conn.cursor()
-        cursor.execute("SELECT * FROM cardset")
-        cards = [dict(row) for row in cursor.fetchall()]
-    return render_template("search.html", cards=cards)
+# @app.route("/results", methods=["POST", "GET"])
+# def results():
+#     if request.method == "POST":
+#         stage = request.form.get("stage")
+#         energy_type = request.form.get("energy_type")
+#         conn = sqlite3.connect("pokemon.db")
+#         conn.row_factory = sqlite3.Row
+#         cursor = conn.cursor()
+#         cursor.execute(
+#             "SELECT * FROM cardset WHERE stage = (?) AND energytype = (?)",
+#             (stage, energy_type),
+#         )
+#         cards = [dict(row) for row in cursor.fetchall()]
+#     else:
+#         conn = sqlite3.connect("pokemon.db")
+#         conn.row_factory = sqlite3.Row
+#         cursor = conn.cursor()
+#         cursor.execute("SELECT * FROM cardset")
+#         cards = [dict(row) for row in cursor.fetchall()]
+#     return cards
 
 
 if __name__ == "__main__":
